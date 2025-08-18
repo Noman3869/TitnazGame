@@ -7,81 +7,128 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #111827; /* A slightly darker gray-900 */
+            background-color: #0c0a18; /* Dark purple background */
+            background-image: radial-gradient(circle at top right, rgba(128, 0, 128, 0.3), transparent 40%),
+                              radial-gradient(circle at bottom left, rgba(0, 0, 255, 0.3), transparent 40%);
         }
-        /* Simple animation for fade-in effect on load */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .font-orbitron {
+            font-family: 'Orbitron', sans-serif;
         }
-        .fade-in {
-            animation: fadeIn 0.8s ease-out forwards;
+        
+        /* --- Card Flip Animation --- */
+        .card {
+            perspective: 1000px;
+        }
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+        .card:hover .card-inner {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Safari */
+            backface-visibility: hidden;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        .card-front img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensures the image covers the card area */
+        }
+        .card-back {
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            background-color: #1f2937;
+        }
+
+        /* --- Scroll Animations --- */
+        .reveal {
+            position: relative;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* --- Glow Effect --- */
+        .glow-button {
+            box-shadow: 0 0 5px #6366f1, 0 0 10px #6366f1, 0 0 15px #6366f1;
         }
     </style>
 </head>
 <body class="bg-gray-900 text-gray-200">
 
     <!-- Header & Navigation -->
-    <header class="bg-gray-900/80 backdrop-blur-sm fixed top-0 left-0 right-0 z-50">
+    <header class="bg-black/30 backdrop-blur-sm fixed top-0 left-0 right-0 z-50">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold text-white hover:text-cyan-400 transition-colors">NN</a>
+            <a href="#" class="text-2xl font-bold text-white hover:text-indigo-400 transition-colors font-orbitron">NN</a>
             <nav class="hidden md:flex space-x-8">
-                <a href="#about" class="text-gray-300 hover:text-cyan-400 transition-colors">About</a>
-                <a href="#projects" class="text-gray-300 hover:text-cyan-400 transition-colors">Portfolio</a>
-                <a href="#skills" class="text-gray-300 hover:text-cyan-400 transition-colors">Skills</a>
-                <a href="#contact" class="text-gray-300 hover:text-cyan-400 transition-colors">Contact</a>
+                <a href="#about" class="text-gray-300 hover:text-indigo-400 transition-colors">About</a>
+                <a href="#projects" class="text-gray-300 hover:text-indigo-400 transition-colors">Portfolio</a>
+                <a href="#skills" class="text-gray-300 hover:text-indigo-400 transition-colors">Skills</a>
+                <a href="#contact" class="text-gray-300 hover:text-indigo-400 transition-colors">Contact</a>
             </nav>
-            <button id="mobile-menu-button" class="md:hidden text-gray-300 focus:outline-none">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-            </button>
-        </div>
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
-            <a href="#about" class="block py-2 text-gray-300 hover:text-cyan-400">About</a>
-            <a href="#projects" class="block py-2 text-gray-300 hover:text-cyan-400">Portfolio</a>
-            <a href="#skills" class="block py-2 text-gray-300 hover:text-cyan-400">Skills</a>
-            <a href="#contact" class="block py-2 text-gray-300 hover:text-cyan-400">Contact</a>
         </div>
     </header>
 
     <main class="container mx-auto px-6 pt-24">
 
         <!-- Hero Section -->
-        <section id="home" class="min-h-screen flex items-center fade-in">
-            <div class="text-center md:text-left w-full">
-                <h1 class="text-4xl md:text-6xl font-bold text-white leading-tight mb-4">
-                    Noman Nazir
-                </h1>
-                <p class="text-xl md:text-2xl text-cyan-300 mb-8">
-                    🎮 Game Developer specialized in Roblox | Unity | Meta Quest (VR)
-                </p>
-                <p class="max-w-2xl mx-auto md:mx-0 text-gray-400 mb-8">
-                    I build engaging, scalable, and immersive games across multiple platforms, turning creative visions into interactive realities.
-                </p>
-                <a href="#projects" class="bg-cyan-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-cyan-700 transition-transform transform hover:scale-105">
-                    View My Work
-                </a>
+        <section id="home" class="min-h-screen flex items-center">
+            <div class="flex flex-col md:flex-row items-center w-full">
+                <div class="md:w-1/2 text-center md:text-left reveal active">
+                    <h1 class="text-4xl md:text-6xl font-bold text-white leading-tight mb-4 font-orbitron">
+                        Noman Nazir
+                    </h1>
+                    <p class="text-xl md:text-2xl bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400 mb-8">
+                        🎮 Game Developer specialized in Unity | Roblox | Meta Quest (VR)
+                    </p>
+                    <p class="max-w-xl mx-auto md:mx-0 text-gray-400 mb-8">
+                        I build engaging, scalable, and immersive games across multiple platforms, turning creative visions into interactive realities.
+                    </p>
+                    <a href="#projects" class="bg-indigo-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-indigo-700 transition-all transform hover:scale-105 glow-button">
+                        View My Work
+                    </a>
+                </div>
+                <div class="md:w-1/2 mt-10 md:mt-0 reveal active" style="transition-delay: 0.2s;">
+                    <img src="images/hero-image.png" alt="Futuristic game development concept" class="w-full max-w-md mx-auto rounded-lg shadow-2xl" onerror="this.onerror=null;this.src='https://placehold.co/600x450/0c0a18/a78bfa?text=Hero+Image';">
+                </div>
             </div>
         </section>
 
         <!-- About Me Section -->
-        <section id="about" class="py-20 fade-in" style="animation-delay: 0.2s;">
-            <h2 class="text-3xl font-bold text-center mb-12 text-white">About Me</h2>
+        <section id="about" class="py-20 reveal">
+            <h2 class="text-3xl font-bold text-center mb-12 text-white font-orbitron">About Me</h2>
             <div class="flex flex-col md:flex-row items-center gap-12">
                 <div class="md:w-1/3">
-                    <img src="https://placehold.co/400x400/111827/06b6d4?text=NN" alt="Noman Nazir's Logo" class="rounded-full shadow-lg mx-auto w-64 h-64 md:w-full md:h-auto object-cover">
+                    <img src="https://placehold.co/400x400/0c0a18/a78bfa?text=NN" alt="Noman Nazir's Logo" class="rounded-full shadow-lg mx-auto w-64 h-64 md:w-full md:h-auto object-cover border-4 border-indigo-500/50">
                 </div>
                 <div class="md:w-2/3">
                     <p class="text-gray-400 leading-relaxed mb-4">
-                        I’m a passionate game developer with <strong>3+ years of experience</strong> creating engaging and scalable games. I thrive on solving complex problems and building robust systems that provide players with unforgettable experiences.
+                        With over <strong>6+ years of experience</strong>, I am a passionate game developer who began my professional journey in 2019. I specialize in leading games from concept to completion, with a strong focus on project optimization, multiplayer systems, and even NFT projects. My expertise spans 2D/3D development across web, PC, and mobile platforms.
                     </p>
                     <div class="text-gray-400 space-y-2">
+                       <p><strong>Unity:</strong> My major skill is developing PC/Mobile games with a focus on multiplayer functionality and performance optimization.</p>
                        <p><strong>Roblox:</strong> Crafting everything from fun obbies and simulators to complex custom game systems.</p>
-                       <p><strong>Unity:</strong> Developing PC/Mobile games with a focus on multiplayer functionality and performance optimization.</p>
                        <p><strong>Meta Quest (VR):</strong> Building immersive VR experiences and interactive worlds that push the boundaries of virtual reality.</p>
                     </div>
                 </div>
@@ -89,103 +136,154 @@
         </section>
 
         <!-- Projects Section -->
-        <section id="projects" class="py-20 fade-in" style="animation-delay: 0.4s;">
-            <h2 class="text-3xl font-bold text-center mb-12 text-white">Portfolio Highlights</h2>
+        <!-- IMPORTANT: Create an 'images' folder in your repository. -->
+        <!-- For best results, use images with a 4:3 aspect ratio (e.g., 600px by 450px). -->
+        <section id="projects" class="py-20 reveal">
+            <h2 class="text-3xl font-bold text-center mb-12 text-white font-orbitron">Portfolio Highlights</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Project Card 1 -->
-                <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg transform hover:-translate-y-2 transition-transform duration-300">
-                    <img src="https://placehold.co/600x400/111827/06b6d4?text=Roblox" alt="Roblox Project" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2 text-white">Roblox Obby Challenge</h3>
-                        <p class="text-gray-400 mb-4">A fun and engaging parkour system designed with scalable code patterns for high player counts.</p>
-                        <a href="#" class="text-cyan-400 hover:text-cyan-300 font-semibold">View Project &rarr;</a>
+                
+                <!-- Project Card 1: Strategotchi -->
+                <div class="card h-96">
+                    <div class="card-inner">
+                        <div class="card-front bg-gray-800">
+                            <img src="images/image1.png" alt="Strategotchi" onerror="this.onerror=null;this.src='https://placehold.co/600x450/1f2937/ffffff?text=Strategotchi';">
+                        </div>
+                        <div class="card-back">
+                            <h3 class="text-xl font-bold mb-2 text-white">Strategotchi</h3>
+                            <p class="text-gray-400 mb-4 text-center">A Web3 pet game combining Tamagotchi-style care with strategic gameplay and NFT integration.</p>
+                            <a href="https://strategotchi.io/" target="_blank" class="text-indigo-400 hover:text-indigo-300 font-semibold">Visit Site &rarr;</a>
+                        </div>
                     </div>
                 </div>
-                <!-- Project Card 2 -->
-                <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg transform hover:-translate-y-2 transition-transform duration-300">
-                    <img src="https://placehold.co/600x400/111827/06b6d4?text=Unity" alt="Unity Project" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2 text-white">Unity Horror Game Prototype</h3>
-                        <p class="text-gray-400 mb-4">An atmospheric, small-scale project developed for Steam, focusing on suspense and environmental storytelling.</p>
-                        <a href="#" class="text-cyan-400 hover:text-cyan-300 font-semibold">View Project &rarr;</a>
+
+                <!-- Project Card 2: Internet Cafe Business Tycoon -->
+                <div class="card h-96">
+                    <div class="card-inner">
+                        <div class="card-front bg-gray-800">
+                            <img src="images/image2.png" alt="Internet Cafe Business Tycoon" onerror="this.onerror=null;this.src='https://placehold.co/600x450/1f2937/ffffff?text=Internet+Cafe';">
+                        </div>
+                        <div class="card-back">
+                            <h3 class="text-xl font-bold mb-2 text-white">Internet Cafe Business Tycoon</h3>
+                            <p class="text-gray-400 mb-4 text-center">Build and manage your own internet cafe, upgrading computers and expanding your gaming empire.</p>
+                            <a href="https://apps.apple.com/us/app/internet-cafe-business-tycoon/id1616308238" target="_blank" class="text-indigo-400 hover:text-indigo-300 font-semibold">View on App Store &rarr;</a>
+                        </div>
                     </div>
                 </div>
-                <!-- Project Card 3 -->
-                <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg transform hover:-translate-y-2 transition-transform duration-300">
-                    <img src="https://placehold.co/600x400/111827/06b6d4?text=VR" alt="VR Project" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2 text-white">Meta Quest VR Escape Room</h3>
-                        <p class="text-gray-400 mb-4">An immersive VR puzzle experience designed from the ground up for the Meta Quest platform.</p>
-                        <a href="#" class="text-cyan-400 hover:text-cyan-300 font-semibold">View Project &rarr;</a>
+
+                <!-- Project Card 3: Car Sales Car Tycoon -->
+                <div class="card h-96">
+                    <div class="card-inner">
+                        <div class="card-front bg-gray-800">
+                            <img src="images/image3.png" alt="Car Sales Car Tycoon Games" onerror="this.onerror=null;this.src='https://placehold.co/600x450/1f2937/ffffff?text=Car+Sales';">
+                        </div>
+                        <div class="card-back">
+                            <h3 class="text-xl font-bold mb-2 text-white">Car Sales Car Tycoon Games</h3>
+                            <p class="text-gray-400 mb-4 text-center">Run a car dealership, buy and sell vehicles, and become a successful car tycoon in this business simulator.</p>
+                            <a href="https://apps.apple.com/us/app/car-sales-car-tycoon-games/id6469861219" target="_blank" class="text-indigo-400 hover:text-indigo-300 font-semibold">View on App Store &rarr;</a>
+                        </div>
                     </div>
                 </div>
+                
+                <!-- Project Card 4: Downhill BMX Challenge -->
+                <div class="card h-96">
+                    <div class="card-inner">
+                        <div class="card-front bg-gray-800">
+                            <img src="images/image4.png" alt="Downhill BMX Challenge" onerror="this.onerror=null;this.src='https://placehold.co/600x450/1f2937/ffffff?text=BMX+Challenge';">
+                        </div>
+                        <div class="card-back">
+                            <h3 class="text-xl font-bold mb-2 text-white">Downhill BMX Challenge</h3>
+                            <p class="text-gray-400 mb-4 text-center">An adrenaline-pumping BMX game focused on downhill racing, stunts, and challenging obstacle courses.</p>
+                            <a href="https://www.memuplay.com/how-to-play-com.titanz.downhill.bmxchallange.transformchallange-on-pc.html" target="_blank" class="text-indigo-400 hover:text-indigo-300 font-semibold">View Project &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 5: Zombie Puzzle -->
+                <div class="card h-96">
+                    <div class="card-inner">
+                        <div class="card-front bg-gray-800">
+                            <img src="images/image5.png" alt="Zombie Puzzle: Color Sort Game" onerror="this.onerror=null;this.src='https://placehold.co/600x450/1f2937/ffffff?text=Zombie+Puzzle';">
+                        </div>
+                        <div class="card-back">
+                            <h3 class="text-xl font-bold mb-2 text-white">Zombie Puzzle: Color Sort</h3>
+                            <p class="text-gray-400 mb-4 text-center">A unique twist on color sorting puzzles, featuring a fun zombie theme and brain-teasing levels.</p>
+                            <a href="https://apps.apple.com/us/app/zombie-puzzle-color-sort-game/id6477746949" target="_blank" class="text-indigo-400 hover:text-indigo-300 font-semibold">View on App Store &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 6: Night Shift SuperMarket -->
+                <div class="card h-96">
+                    <div class="card-inner">
+                        <div class="card-front bg-gray-800">
+                            <img src="images/image6.png" alt="Night Shift SuperMarket Horror Game" onerror="this.onerror=null;this.src='https://placehold.co/600x450/1f2937/ffffff?text=Night+Shift';">
+                        </div>
+                        <div class="card-back">
+                            <h3 class="text-xl font-bold mb-2 text-white">Night Shift SuperMarket</h3>
+                            <p class="text-gray-400 mb-4 text-center">A terrifying Roblox horror experience. Survive your night shift in a haunted supermarket.</p>
+                            <a href="https://www.roblox.com/games/76357675711852/Night-Shift-SuperMarket-Horror-Game" target="_blank" class="text-indigo-400 hover:text-indigo-300 font-semibold">Play on Roblox &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </section>
 
         <!-- Skills Section -->
-        <section id="skills" class="py-20 fade-in" style="animation-delay: 0.6s;">
-            <h2 class="text-3xl font-bold text-center mb-12 text-white">Skills & Technologies</h2>
+        <section id="skills" class="py-20 reveal">
+            <h2 class="text-3xl font-bold text-center mb-12 text-white font-orbitron">Skills & Technologies</h2>
             <div class="max-w-4xl mx-auto">
                 <div class="flex flex-wrap justify-center gap-4">
-                    <span class="bg-gray-700 text-gray-200 text-sm font-medium px-4 py-2 rounded-full">Lua</span>
+                    <span class="bg-indigo-500/20 text-indigo-300 text-sm font-medium px-4 py-2 rounded-full border border-indigo-500/30">Unity (URP/HDRP)</span>
+                    <span class="bg-indigo-500/20 text-indigo-300 text-sm font-medium px-4 py-2 rounded-full border border-indigo-500/30">Roblox Studio</span>
+                    <span class="bg-indigo-500/20 text-indigo-300 text-sm font-medium px-4 py-2 rounded-full border border-indigo-500/30">Meta Quest (VR)</span>
                     <span class="bg-gray-700 text-gray-200 text-sm font-medium px-4 py-2 rounded-full">C#</span>
+                    <span class="bg-gray-700 text-gray-200 text-sm font-medium px-4 py-2 rounded-full">Lua</span>
                     <span class="bg-gray-700 text-gray-200 text-sm font-medium px-4 py-2 rounded-full">JavaScript</span>
-                    <span class="bg-cyan-800/50 text-cyan-200 text-sm font-medium px-4 py-2 rounded-full">Roblox Studio</span>
-                    <span class="bg-cyan-800/50 text-cyan-200 text-sm font-medium px-4 py-2 rounded-full">Unity (URP/HDRP)</span>
-                    <span class="bg-cyan-800/50 text-cyan-200 text-sm font-medium px-4 py-2 rounded-full">Meta Quest (VR)</span>
                     <span class="bg-gray-700 text-gray-200 text-sm font-medium px-4 py-2 rounded-full">Multiplayer Networking</span>
-                    <span class="bg-gray-700 text-gray-200 text-sm font-medium px-4 py-2 rounded-full">Fusion/Netcode</span>
-                    <span class="bg-gray-700 text-gray-200 text-sm font-medium px-4 py-2 rounded-full">Game Optimization</span>
-                    <span class="bg-gray-700 text-gray-200 text-sm font-medium px-4 py-2 rounded-full">UI/UX Design</span>
-                    <span class="bg-gray-700 text-gray-200 text-sm font-medium px-4 py-2 rounded-full">Monetization Systems</span>
                 </div>
             </div>
         </section>
 
         <!-- Contact Section -->
-        <section id="contact" class="py-20 fade-in" style="animation-delay: 0.8s;">
-            <h2 class="text-3xl font-bold text-center mb-4 text-white">Get In Touch</h2>
-            <p class="text-center text-gray-400 mb-12 max-w-lg mx-auto">I am available for freelance work and new projects. Let's build something amazing together!</p>
-            <div class="text-center">
-                 <a href="mailto:your-email-here@example.com" class="bg-cyan-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-cyan-700 transition-colors">
-                    Email Me
-                </a>
-                 <a href="[your Fiverr link here]" class="ml-4 bg-gray-700 text-white font-semibold px-8 py-3 rounded-lg hover:bg-gray-600 transition-colors">
-                    View My Fiverr
-                </a>
+        <section id="contact" class="py-20 reveal">
+            <h2 class="text-3xl font-bold text-center mb-4 text-white font-orbitron">Get In Touch</h2>
+            <p class="text-center text-gray-400 mb-12 max-w-lg mx-auto">I am always open to discussing new projects or opportunities. If you have an interesting idea, let's connect.</p>
+            <div class="flex flex-wrap justify-center gap-4">
+                 <a href="mailto:Noman3869@gmail.com" class="bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors">Email Me</a>
+                 <a href="https://www.fiverr.com/game_dev3loper?public_mode=true" target="_blank" class="bg-gray-700 text-white font-semibold px-6 py-3 rounded-lg hover:bg-gray-600 transition-colors">Fiverr</a>
+                 <a href="https://www.upwork.com/freelancers/~015eeb9799f638ed9c" target="_blank" class="bg-gray-700 text-white font-semibold px-6 py-3 rounded-lg hover:bg-gray-600 transition-colors">Upwork</a>
+                 <a href="https://www.linkedin.com/in/noman-nazir-37a983289" target="_blank" class="bg-gray-700 text-white font-semibold px-6 py-3 rounded-lg hover:bg-gray-600 transition-colors">LinkedIn</a>
             </div>
         </section>
 
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 mt-20">
-        <div class="container mx-auto px-6 py-6 text-center text-gray-400">
-            <p>&copy; 2024 Noman Nazir. All Rights Reserved.</p>
+    <footer class="bg-black/30 mt-20">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-400">
+            <p>&copy; 2025 Noman Nazir. All Rights Reserved.</p>
         </div>
     </footer>
 
     <script>
-        // Mobile menu toggle
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                if (!mobileMenu.classList.contains('hidden')) {
-                    mobileMenu.classList.add('hidden');
+        // Scroll Animation Logic
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 150;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                } else {
+                    reveals[i].classList.remove("active");
                 }
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        // Initial check
+        reveal();
     </script>
 
 </body>
