@@ -1,0 +1,16 @@
+# Site settings
+title: Noman Nazir – Game Developer
+description: >- # this means to ignore newlines until the next key
+  A portfolio showcasing 6+ years of experience in creating engaging and scalable games 
+  across Roblox, Unity, and Meta Quest (VR).
+author: Noman Nazir
+
+# Choose a theme for your site
+theme: jekyll-theme-minimal
+
+# Optional: Add your social links for some themes
+github_username: YourGitHubUsername # Replace with your username
+# twitter_username: your_twitter
+
+# Build settings
+markdown: kramdown
