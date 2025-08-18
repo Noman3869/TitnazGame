@@ -75,6 +75,9 @@
         }
 
         /* --- Unity Game Container --- */
+        #game-container-wrapper {
+            position: relative;
+        }
         #gameContainer {
             width: 100%;
             max-width: 960px;
@@ -85,6 +88,9 @@
             width: 100%;
             height: 100%;
             background: #231F20;
+        }
+        #progress-bar {
+            transition: width 0.3s ease-in-out;
         }
     </style>
 </head>
@@ -159,11 +165,15 @@
                 </button>
             </div>
             <div id="game-container-wrapper" class="hidden">
-                <div id="gameContainer">
+                <div id="gameContainer" class="relative">
                     <canvas id="unity-canvas"></canvas>
-                </div>
-                <div id="loading-bar" class="hidden w-full max-w-md mx-auto bg-gray-700 rounded-full h-2.5 mt-4">
-                    <div id="progress-bar" class="bg-indigo-500 h-2.5 rounded-full" style="width: 0%"></div>
+                    <div id="loading-overlay" class="absolute inset-0 bg-black bg-opacity-75 flex-col items-center justify-center hidden">
+                        <div class="text-white text-2xl mb-4 font-orbitron">LOADING...</div>
+                        <div class="w-full max-w-md bg-gray-700 rounded-full h-4">
+                            <div id="progress-bar" class="bg-gradient-to-r from-indigo-500 to-purple-500 h-4 rounded-full" style="width: 0%"></div>
+                        </div>
+                        <div id="progress-text" class="text-white mt-3 text-lg">0%</div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -319,18 +329,16 @@
         // Unity WebGL Demo Logic
         const launchBtn = document.getElementById('launch-demo-btn');
         const gameWrapper = document.getElementById('game-container-wrapper');
+        const loadingOverlay = document.getElementById('loading-overlay');
         
         launchBtn.addEventListener('click', () => {
             launchBtn.style.display = 'none';
             gameWrapper.style.display = 'block';
 
-            var container = document.querySelector("#gameContainer");
             var canvas = document.querySelector("#unity-canvas");
-            var loadingBar = document.querySelector("#loading-bar");
             var progressBar = document.querySelector("#progress-bar");
+            var progressText = document.querySelector("#progress-text");
             
-            // IMPORTANT: The names 'Build.loader.js' and 'Build' for the config
-            // must match the output names from your Unity build.
             var buildUrl = "Build";
             var loaderUrl = buildUrl + "/Build.loader.js";
             var config = {
@@ -347,10 +355,12 @@
             script.src = loaderUrl;
             script.onload = () => {
                 createUnityInstance(canvas, config, (progress) => {
-                    loadingBar.style.display = 'block';
-                    progressBar.style.width = 100 * progress + "%";
+                    loadingOverlay.style.display = 'flex';
+                    const percentage = Math.round(progress * 100);
+                    progressBar.style.width = percentage + "%";
+                    progressText.innerText = percentage + "%";
                 }).then((unityInstance) => {
-                    loadingBar.style.display = 'none';
+                    loadingOverlay.style.display = 'none';
                 }).catch((message) => {
                     alert(message);
                 });
