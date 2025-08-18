@@ -73,6 +73,19 @@
         .glow-button {
             box-shadow: 0 0 5px #6366f1, 0 0 10px #6366f1, 0 0 15px #6366f1;
         }
+
+        /* --- Unity Game Container --- */
+        #gameContainer {
+            width: 100%;
+            max-width: 960px;
+            height: 600px;
+            margin: auto;
+        }
+        #unity-canvas {
+            width: 100%;
+            height: 100%;
+            background: #231F20;
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-gray-200">
@@ -83,6 +96,7 @@
             <a href="#" class="text-2xl font-bold text-white hover:text-indigo-400 transition-colors font-orbitron">NN</a>
             <nav class="hidden md:flex space-x-8">
                 <a href="#about" class="text-gray-300 hover:text-indigo-400 transition-colors">About</a>
+                <a href="#demo" class="text-gray-300 hover:text-indigo-400 transition-colors">Demo</a>
                 <a href="#projects" class="text-gray-300 hover:text-indigo-400 transition-colors">Portfolio</a>
                 <a href="#skills" class="text-gray-300 hover:text-indigo-400 transition-colors">Skills</a>
                 <a href="#contact" class="text-gray-300 hover:text-indigo-400 transition-colors">Contact</a>
@@ -134,10 +148,27 @@
                 </div>
             </div>
         </section>
+        
+        <!-- Playable Demo Section -->
+        <section id="demo" class="py-20 reveal">
+            <h2 class="text-3xl font-bold text-center mb-4 text-white font-orbitron">Playable Demo</h2>
+            <p class="text-center text-gray-400 mb-12 max-w-lg mx-auto">This is a basic prototype of a small game, showcasing optimization, animations, and core mechanics. Click the button below to load and play.</p>
+            <div class="text-center mb-8">
+                <button id="launch-demo-btn" class="bg-indigo-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-indigo-700 transition-all transform hover:scale-105 glow-button">
+                    Launch Demo
+                </button>
+            </div>
+            <div id="game-container-wrapper" class="hidden">
+                <div id="gameContainer">
+                    <canvas id="unity-canvas"></canvas>
+                </div>
+                <div id="loading-bar" class="hidden w-full max-w-md mx-auto bg-gray-700 rounded-full h-2.5 mt-4">
+                    <div id="progress-bar" class="bg-indigo-500 h-2.5 rounded-full" style="width: 0%"></div>
+                </div>
+            </div>
+        </section>
 
         <!-- Projects Section -->
-        <!-- IMPORTANT: Create an 'images' folder in your repository. -->
-        <!-- For best results, use images with a 4:3 aspect ratio (e.g., 600px by 450px). -->
         <section id="projects" class="py-20 reveal">
             <h2 class="text-3xl font-bold text-center mb-12 text-white font-orbitron">Portfolio Highlights</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -284,6 +315,49 @@
         window.addEventListener("scroll", reveal);
         // Initial check
         reveal();
+
+        // Unity WebGL Demo Logic
+        const launchBtn = document.getElementById('launch-demo-btn');
+        const gameWrapper = document.getElementById('game-container-wrapper');
+        
+        launchBtn.addEventListener('click', () => {
+            launchBtn.style.display = 'none';
+            gameWrapper.style.display = 'block';
+
+            var container = document.querySelector("#gameContainer");
+            var canvas = document.querySelector("#unity-canvas");
+            var loadingBar = document.querySelector("#loading-bar");
+            var progressBar = document.querySelector("#progress-bar");
+            
+            // IMPORTANT: The names 'Build.loader.js' and 'Build' for the config
+            // must match the output names from your Unity build.
+            var buildUrl = "Build";
+            var loaderUrl = buildUrl + "/Build.loader.js";
+            var config = {
+                dataUrl: buildUrl + "/Build.data",
+                frameworkUrl: buildUrl + "/Build.framework.js",
+                codeUrl: buildUrl + "/Build.wasm",
+                streamingAssetsUrl: "StreamingAssets",
+                companyName: "DefaultCompany",
+                productName: "YourGameName",
+                productVersion: "1.0",
+            };
+
+            var script = document.createElement("script");
+            script.src = loaderUrl;
+            script.onload = () => {
+                createUnityInstance(canvas, config, (progress) => {
+                    loadingBar.style.display = 'block';
+                    progressBar.style.width = 100 * progress + "%";
+                }).then((unityInstance) => {
+                    loadingBar.style.display = 'none';
+                }).catch((message) => {
+                    alert(message);
+                });
+            };
+            document.body.appendChild(script);
+        });
+
     </script>
 
 </body>
