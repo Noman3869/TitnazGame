@@ -1,374 +1,204 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noman Nazir – Game Developer</title>
+    <title>Titanz Game - Crafting Worlds</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0c0a18; /* Dark purple background */
-            background-image: radial-gradient(circle at top right, rgba(128, 0, 128, 0.3), transparent 40%),
-                              radial-gradient(circle at bottom left, rgba(0, 0, 255, 0.3), transparent 40%);
+            font-family: 'Roboto', sans-serif;
+            background-color: #1a202c;
+            color: #e2e8f0;
         }
-        .font-orbitron {
+        h1, h2, h3 {
             font-family: 'Orbitron', sans-serif;
         }
-        
-        /* --- Card Flip Animation --- */
-        .card {
-            perspective: 1000px;
+        .hero-bg {
+            background-image: linear-gradient(rgba(26, 32, 44, 0.8), rgba(26, 32, 44, 1)), url('images/hero-image.png');
+            background-size: cover;
+            background-position: center;
         }
-        .card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transition: transform 0.8s;
-            transform-style: preserve-3d;
-        }
-        .card:hover .card-inner {
-            transform: rotateY(180deg);
-        }
-        .card-front, .card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden; /* Safari */
-            backface-visibility: hidden;
+        .unity-canvas {
+            border: 5px solid #4a5568;
             border-radius: 0.5rem;
-            overflow: hidden;
-        }
-        .card-front img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Ensures the image covers the card area */
-        }
-        .card-back {
-            transform: rotateY(180deg);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 1.5rem;
-            background-color: #1f2937;
-        }
-
-        /* --- Scroll Animations --- */
-        .reveal {
-            position: relative;
-            opacity: 0;
-            transform: translateY(50px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        /* --- Glow Effect --- */
-        .glow-button {
-            box-shadow: 0 0 5px #6366f1, 0 0 10px #6366f1, 0 0 15px #6366f1;
-        }
-
-        /* --- Unity Game Container --- */
-        #game-container-wrapper {
-            position: relative;
-        }
-        #gameContainer {
-            width: 100%;
-            max-width: 960px;
-            height: 600px;
-            margin: auto;
-        }
-        #unity-canvas {
-            width: 100%;
-            height: 100%;
-            background: #231F20;
-        }
-        #progress-bar {
-            transition: width 0.3s ease-in-out;
         }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-200">
+<body class="antialiased">
 
-    <!-- Header & Navigation -->
-    <header class="bg-black/30 backdrop-blur-sm fixed top-0 left-0 right-0 z-50">
-        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold text-white hover:text-indigo-400 transition-colors font-orbitron">NN</a>
-            <nav class="hidden md:flex space-x-8">
-                <a href="#about" class="text-gray-300 hover:text-indigo-400 transition-colors">About</a>
-                <a href="#demo" class="text-gray-300 hover:text-indigo-400 transition-colors">Demo</a>
-                <a href="#projects" class="text-gray-300 hover:text-indigo-400 transition-colors">Portfolio</a>
-                <a href="#skills" class="text-gray-300 hover:text-indigo-400 transition-colors">Skills</a>
-                <a href="#contact" class="text-gray-300 hover:text-indigo-400 transition-colors">Contact</a>
-            </nav>
+    <!-- Header -->
+    <header class="bg-gray-900 shadow-lg sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-3xl font-bold text-white">Titanz Game</a>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#about" class="text-gray-300 hover:text-white transition duration-300">About Us</a>
+                <a href="#portfolio" class="text-gray-300 hover:text-white transition duration-300">Our Games</a>
+                <a href="#game" class="text-gray-300 hover:text-white transition duration-300">Play Demo</a>
+                <a href="contact/" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full transition duration-300">Contact Us</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-6 pt-2 pb-4 space-y-2">
+            <a href="#about" class="block text-gray-300 hover:text-white transition duration-300">About Us</a>
+            <a href="#portfolio" class="block text-gray-300 hover:text-white transition duration-300">Our Games</a>
+            <a href="#game" class="block text-gray-300 hover:text-white transition duration-300">Play Demo</a>
+            <a href="contact/" class="block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 text-center">Contact Us</a>
         </div>
     </header>
 
-    <main class="container mx-auto px-6 pt-24">
+    <!-- Hero Section -->
+    <section class="hero-bg py-24 text-white text-center">
+        <div class="container mx-auto px-6">
+            <h1 class="text-5xl md:text-7xl font-bold mb-4 leading-tight">Titanz Game</h1>
+            <p class="text-xl md:text-2xl mb-2 font-light">Crafting Worlds, One Pixel at a Time.</p>
+            <p class="text-lg md:text-xl text-indigo-400">Specialized in making games for Android, iOS, & Steam in Unity.</p>
+        </div>
+    </section>
 
-        <!-- Hero Section -->
-        <section id="home" class="min-h-screen flex items-center">
-            <div class="flex flex-col md:flex-row items-center w-full">
-                <div class="md:w-1/2 text-center md:text-left reveal active">
-                    <h1 class="text-4xl md:text-6xl font-bold text-white leading-tight mb-4 font-orbitron">
-                        Noman Nazir
-                    </h1>
-                    <p class="text-xl md:text-2xl bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400 mb-8">
-                        🎮 Game Developer specialized in Unity | Roblox | Meta Quest (VR)
-                    </p>
-                    <p class="max-w-xl mx-auto md:mx-0 text-gray-400 mb-8">
-                        I build engaging, scalable, and immersive games across multiple platforms, turning creative visions into interactive realities.
-                    </p>
-                    <a href="#projects" class="bg-indigo-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-indigo-700 transition-all transform hover:scale-105 glow-button">
-                        View My Work
-                    </a>
-                </div>
-                <div class="md:w-1/2 mt-10 md:mt-0 reveal active" style="transition-delay: 0.2s;">
-                    <img src="images/hero-image.png" alt="Futuristic game development concept" class="w-full max-w-md mx-auto rounded-lg shadow-2xl" onerror="this.onerror=null;this.src='https://placehold.co/600x450/0c0a18/a78bfa?text=Hero+Image';">
-                </div>
-            </div>
-        </section>
+    <!-- About Us Section -->
+    <section id="about" class="py-20 bg-gray-800">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold mb-8 text-white">About Us</h2>
+            <p class="max-w-3xl mx-auto text-lg text-gray-400">
+                Welcome to Titanz Game, a passionate studio dedicated to creating unforgettable gaming experiences. We are a team of creative developers, artists, and storytellers who live and breathe games. With expertise in the Unity engine, we specialize in developing high-quality, engaging titles for a global audience across Android, iOS, and Steam. Our mission is to push the boundaries of interactive entertainment and deliver games that resonate with players everywhere. From concept to launch, we pour our hearts into every project, ensuring a polished and memorable final product.
+            </p>
+        </div>
+    </section>
 
-        <!-- About Me Section -->
-        <section id="about" class="py-20 reveal">
-            <h2 class="text-3xl font-bold text-center mb-12 text-white font-orbitron">About Me</h2>
-            <div class="flex flex-col md:flex-row items-center gap-12">
-                <div class="md:w-1/3">
-                    <img src="https://placehold.co/400x400/0c0a18/a78bfa?text=NN" alt="Noman Nazir's Logo" class="rounded-full shadow-lg mx-auto w-64 h-64 md:w-full md:h-auto object-cover border-4 border-indigo-500/50">
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="py-20">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-12 text-white">Our Masterpieces</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <!-- Portfolio Item 1 -->
+                <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-500">
+                    <img src="images/image1.png" alt="Project 1" class="w-full h-56 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2 text-white">Cosmic Drift</h3>
+                        <p class="text-gray-400">An endless space racer with stunning visuals and tight controls. Dodge asteroids and conquer the leaderboard.</p>
+                    </div>
                 </div>
-                <div class="md:w-2/3">
-                    <p class="text-gray-400 leading-relaxed mb-4">
-                        With over <strong>6+ years of experience</strong>, I am a passionate game developer who began my professional journey in 2019. I specialize in leading games from concept to completion, with a strong focus on project optimization, multiplayer systems, and even NFT projects. My expertise spans 2D/3D development across web, PC, and mobile platforms.
-                    </p>
-                    <div class="text-gray-400 space-y-2">
-                       <p><strong>Unity:</strong> My major skill is developing PC/Mobile games with a focus on multiplayer functionality and performance optimization.</p>
-                       <p><strong>Roblox:</strong> Crafting everything from fun obbies and simulators to complex custom game systems.</p>
-                       <p><strong>Meta Quest (VR):</strong> Building immersive VR experiences and interactive worlds that push the boundaries of virtual reality.</p>
+                <!-- Portfolio Item 2 -->
+                <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-500">
+                    <img src="images/image2.png" alt="Project 2" class="w-full h-56 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2 text-white">Jungle Quest</h3>
+                        <p class="text-gray-400">A vibrant platformer adventure. Explore ancient ruins and uncover hidden treasures on iOS and Android.</p>
+                    </div>
+                </div>
+                <!-- Portfolio Item 3 -->
+                <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-500">
+                    <img src="images/image3.png" alt="Project 3" class="w-full h-56 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2 text-white">SteamPunk Arena</h3>
+                        <p class="text-gray-400">A competitive multiplayer brawler for Steam. Customize your mech and battle for glory.</p>
+                    </div>
+                </div>
+                 <!-- Portfolio Item 4 -->
+                 <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-500">
+                    <img src="images/image4.png" alt="Project 4" class="w-full h-56 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2 text-white">Cyber Neon</h3>
+                        <p class="text-gray-400">A fast-paced rhythm game set in a futuristic city. Hit the notes and feel the beat.</p>
+                    </div>
+                </div>
+                <!-- Portfolio Item 5 -->
+                <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-500">
+                    <img src="images/image5.png" alt="Project 5" class="w-full h-56 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2 text-white">Mystic Grove</h3>
+                        <p class="text-gray-400">A relaxing puzzle game. Solve intricate challenges in a beautifully enchanted forest.</p>
+                    </div>
+                </div>
+                <!-- Portfolio Item 6 -->
+                <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-500">
+                    <img src="images/image6.png" alt="Project 6" class="w-full h-56 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2 text-white">Wasteland Raiders</h3>
+                        <p class="text-gray-400">A post-apocalyptic survival RPG. Scavenge, craft, and build your shelter to survive.</p>
                     </div>
                 </div>
             </div>
-        </section>
-        
-        <!-- Playable Demo Section -->
-        <section id="demo" class="py-20 reveal">
-            <h2 class="text-3xl font-bold text-center mb-4 text-white font-orbitron">Playable Demo</h2>
-            <p class="text-center text-gray-400 mb-12 max-w-lg mx-auto">This is a basic prototype of a small game, showcasing optimization, animations, and core mechanics. Click the button below to load and play.</p>
-            <div class="text-center mb-8">
-                <button id="launch-demo-btn" class="bg-indigo-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-indigo-700 transition-all transform hover:scale-105 glow-button">
-                    Launch Demo
-                </button>
-            </div>
-            <div id="game-container-wrapper" class="hidden">
-                <div id="gameContainer" class="relative">
-                    <canvas id="unity-canvas"></canvas>
-                    <div id="loading-overlay" class="absolute inset-0 bg-black bg-opacity-75 flex-col items-center justify-center hidden">
-                        <div class="text-white text-2xl mb-4 font-orbitron">LOADING...</div>
-                        <div class="w-full max-w-md bg-gray-700 rounded-full h-4">
-                            <div id="progress-bar" class="bg-gradient-to-r from-indigo-500 to-purple-500 h-4 rounded-full" style="width: 0%"></div>
-                        </div>
-                        <div id="progress-text" class="text-white mt-3 text-lg">0%</div>
+        </div>
+    </section>
+    
+    <!-- Unity Game Section -->
+    <section id="game" class="py-20 bg-gray-900">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold text-white mb-12">Play Our Demo</h2>
+            <div id="unity-container" class="w-full max-w-5xl mx-auto aspect-video relative">
+                <canvas id="unity-canvas" class="w-full h-full unity-canvas"></canvas>
+                <div id="unity-loading-bar">
+                    <div id="unity-logo"></div>
+                    <div id="unity-progress-bar-empty">
+                        <div id="unity-progress-bar-full"></div>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- Projects Section -->
-        <section id="projects" class="py-20 reveal">
-            <h2 class="text-3xl font-bold text-center mb-12 text-white font-orbitron">Portfolio Highlights</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                
-                <!-- Project Card 1: Strategotchi -->
-                <div class="card h-96">
-                    <div class="card-inner">
-                        <div class="card-front bg-gray-800">
-                            <img src="images/image1.png" alt="Strategotchi" onerror="this.onerror=null;this.src='https://placehold.co/600x450/1f2937/ffffff?text=Strategotchi';">
-                        </div>
-                        <div class="card-back">
-                            <h3 class="text-xl font-bold mb-2 text-white">Strategotchi</h3>
-                            <p class="text-gray-400 mb-4 text-center">A Web3 pet game combining Tamagotchi-style care with strategic gameplay and NFT integration.</p>
-                            <a href="https://strategotchi.io/" target="_blank" class="text-indigo-400 hover:text-indigo-300 font-semibold">Visit Site &rarr;</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project Card 2: Internet Cafe Business Tycoon -->
-                <div class="card h-96">
-                    <div class="card-inner">
-                        <div class="card-front bg-gray-800">
-                            <img src="images/image2.png" alt="Internet Cafe Business Tycoon" onerror="this.onerror=null;this.src='https://placehold.co/600x450/1f2937/ffffff?text=Internet+Cafe';">
-                        </div>
-                        <div class="card-back">
-                            <h3 class="text-xl font-bold mb-2 text-white">Internet Cafe Business Tycoon</h3>
-                            <p class="text-gray-400 mb-4 text-center">Build and manage your own internet cafe, upgrading computers and expanding your gaming empire.</p>
-                            <a href="https://apps.apple.com/us/app/internet-cafe-business-tycoon/id1616308238" target="_blank" class="text-indigo-400 hover:text-indigo-300 font-semibold">View on App Store &rarr;</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project Card 3: Car Sales Car Tycoon -->
-                <div class="card h-96">
-                    <div class="card-inner">
-                        <div class="card-front bg-gray-800">
-                            <img src="images/image3.png" alt="Car Sales Car Tycoon Games" onerror="this.onerror=null;this.src='https://placehold.co/600x450/1f2937/ffffff?text=Car+Sales';">
-                        </div>
-                        <div class="card-back">
-                            <h3 class="text-xl font-bold mb-2 text-white">Car Sales Car Tycoon Games</h3>
-                            <p class="text-gray-400 mb-4 text-center">Run a car dealership, buy and sell vehicles, and become a successful car tycoon in this business simulator.</p>
-                            <a href="https://apps.apple.com/us/app/car-sales-car-tycoon-games/id6469861219" target="_blank" class="text-indigo-400 hover:text-indigo-300 font-semibold">View on App Store &rarr;</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Project Card 4: Downhill BMX Challenge -->
-                <div class="card h-96">
-                    <div class="card-inner">
-                        <div class="card-front bg-gray-800">
-                            <img src="images/image4.png" alt="Downhill BMX Challenge" onerror="this.onerror=null;this.src='https://placehold.co/600x450/1f2937/ffffff?text=BMX+Challenge';">
-                        </div>
-                        <div class="card-back">
-                            <h3 class="text-xl font-bold mb-2 text-white">Downhill BMX Challenge</h3>
-                            <p class="text-gray-400 mb-4 text-center">An adrenaline-pumping BMX game focused on downhill racing, stunts, and challenging obstacle courses.</p>
-                            <a href="https://www.memuplay.com/how-to-play-com.titanz.downhill.bmxchallange.transformchallange-on-pc.html" target="_blank" class="text-indigo-400 hover:text-indigo-300 font-semibold">View Project &rarr;</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project Card 5: Zombie Puzzle -->
-                <div class="card h-96">
-                    <div class="card-inner">
-                        <div class="card-front bg-gray-800">
-                            <img src="images/image5.png" alt="Zombie Puzzle: Color Sort Game" onerror="this.onerror=null;this.src='https://placehold.co/600x450/1f2937/ffffff?text=Zombie+Puzzle';">
-                        </div>
-                        <div class="card-back">
-                            <h3 class="text-xl font-bold mb-2 text-white">Zombie Puzzle: Color Sort</h3>
-                            <p class="text-gray-400 mb-4 text-center">A unique twist on color sorting puzzles, featuring a fun zombie theme and brain-teasing levels.</p>
-                            <a href="https://apps.apple.com/us/app/zombie-puzzle-color-sort-game/id6477746949" target="_blank" class="text-indigo-400 hover:text-indigo-300 font-semibold">View on App Store &rarr;</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project Card 6: Night Shift SuperMarket -->
-                <div class="card h-96">
-                    <div class="card-inner">
-                        <div class="card-front bg-gray-800">
-                            <img src="images/image6.png" alt="Night Shift SuperMarket Horror Game" onerror="this.onerror=null;this.src='https://placehold.co/600x450/1f2937/ffffff?text=Night+Shift';">
-                        </div>
-                        <div class="card-back">
-                            <h3 class="text-xl font-bold mb-2 text-white">Night Shift SuperMarket</h3>
-                            <p class="text-gray-400 mb-4 text-center">A terrifying Roblox horror experience. Survive your night shift in a haunted supermarket.</p>
-                            <a href="https://www.roblox.com/games/76357675711852/Night-Shift-SuperMarket-Horror-Game" target="_blank" class="text-indigo-400 hover:text-indigo-300 font-semibold">Play on Roblox &rarr;</a>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- Skills Section -->
-        <section id="skills" class="py-20 reveal">
-            <h2 class="text-3xl font-bold text-center mb-12 text-white font-orbitron">Skills & Technologies</h2>
-            <div class="max-w-4xl mx-auto">
-                <div class="flex flex-wrap justify-center gap-4">
-                    <span class="bg-indigo-500/20 text-indigo-300 text-sm font-medium px-4 py-2 rounded-full border border-indigo-500/30">Unity (URP/HDRP)</span>
-                    <span class="bg-indigo-500/20 text-indigo-300 text-sm font-medium px-4 py-2 rounded-full border border-indigo-500/30">Roblox Studio</span>
-                    <span class="bg-indigo-500/20 text-indigo-300 text-sm font-medium px-4 py-2 rounded-full border border-indigo-500/30">Meta Quest (VR)</span>
-                    <span class="bg-gray-700 text-gray-200 text-sm font-medium px-4 py-2 rounded-full">C#</span>
-                    <span class="bg-gray-700 text-gray-200 text-sm font-medium px-4 py-2 rounded-full">Lua</span>
-                    <span class="bg-gray-700 text-gray-200 text-sm font-medium px-4 py-2 rounded-full">JavaScript</span>
-                    <span class="bg-gray-700 text-gray-200 text-sm font-medium px-4 py-2 rounded-full">Multiplayer Networking</span>
+                <div id="unity-warning"> </div>
+                <div id="unity-footer">
+                    <div id="unity-webgl-logo"></div>
+                    <div id="unity-fullscreen-button"></div>
+                    <div id="unity-build-title">Titanz Game Demo</div>
                 </div>
             </div>
-        </section>
-
-        <!-- Contact Section -->
-        <section id="contact" class="py-20 reveal">
-            <h2 class="text-3xl font-bold text-center mb-4 text-white font-orbitron">Get In Touch</h2>
-            <p class="text-center text-gray-400 mb-12 max-w-lg mx-auto">I am always open to discussing new projects or opportunities. If you have an interesting idea, let's connect.</p>
-            <div class="flex flex-wrap justify-center gap-4">
-                 <a href="mailto:Noman3869@gmail.com" class="bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors">Email Me</a>
-                 <a href="https://www.fiverr.com/game_dev3loper?public_mode=true" target="_blank" class="bg-gray-700 text-white font-semibold px-6 py-3 rounded-lg hover:bg-gray-600 transition-colors">Fiverr</a>
-                 <a href="https://www.upwork.com/freelancers/~015eeb9799f638ed9c" target="_blank" class="bg-gray-700 text-white font-semibold px-6 py-3 rounded-lg hover:bg-gray-600 transition-colors">Upwork</a>
-                 <a href="https://www.linkedin.com/in/noman-nazir-37a983289" target="_blank" class="bg-gray-700 text-white font-semibold px-6 py-3 rounded-lg hover:bg-gray-600 transition-colors">LinkedIn</a>
-            </div>
-        </section>
-
-    </main>
+        </div>
+    </section>
 
     <!-- Footer -->
-    <footer class="bg-black/30 mt-20">
-        <div class="container mx-auto px-6 py-8 text-center text-gray-400">
-            <p>&copy; 2025 Noman Nazir. All Rights Reserved.</p>
+    <footer class="bg-gray-900 text-white">
+        <div class="container mx-auto px-6 py-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="text-center md:text-left mb-4 md:mb-0">
+                    <p class="text-lg font-bold">Titanz Game</p>
+                    <p class="text-sm text-gray-400">&copy; 2024 Titanz Game. All Rights Reserved.</p>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="privacy/" class="text-gray-400 hover:text-white transition duration-300">Privacy Policy</a>
+                </div>
+            </div>
         </div>
     </footer>
 
     <script>
-        // Scroll Animation Logic
-        function reveal() {
-            var reveals = document.querySelectorAll(".reveal");
-            for (var i = 0; i < reveals.length; i++) {
-                var windowHeight = window.innerHeight;
-                var elementTop = reveals[i].getBoundingClientRect().top;
-                var elementVisible = 150;
-                if (elementTop < windowHeight - elementVisible) {
-                    reveals[i].classList.add("active");
-                } else {
-                    reveals[i].classList.remove("active");
-                }
-            }
-        }
-        window.addEventListener("scroll", reveal);
-        // Initial check
-        reveal();
-
-        // Unity WebGL Demo Logic
-        const launchBtn = document.getElementById('launch-demo-btn');
-        const gameWrapper = document.getElementById('game-container-wrapper');
-        const loadingOverlay = document.getElementById('loading-overlay');
-        
-        launchBtn.addEventListener('click', () => {
-            launchBtn.style.display = 'none';
-            gameWrapper.style.display = 'block';
-
-            var canvas = document.querySelector("#unity-canvas");
-            var progressBar = document.querySelector("#progress-bar");
-            var progressText = document.querySelector("#progress-text");
-            
-            var buildUrl = "Build";
-            var loaderUrl = buildUrl + "/Build.loader.js";
-            var config = {
-                dataUrl: buildUrl + "/Build.data",
-                frameworkUrl: buildUrl + "/Build.framework.js",
-                codeUrl: buildUrl + "/Build.wasm",
-                streamingAssetsUrl: "StreamingAssets",
-                companyName: "DefaultCompany",
-                productName: "YourGameName",
-                productVersion: "1.0",
-            };
-
-            var script = document.createElement("script");
-            script.src = loaderUrl;
-            script.onload = () => {
-                createUnityInstance(canvas, config, (progress) => {
-                    loadingOverlay.style.display = 'flex';
-                    const percentage = Math.round(progress * 100);
-                    progressBar.style.width = percentage + "%";
-                    progressText.innerText = percentage + "%";
-                }).then((unityInstance) => {
-                    loadingOverlay.style.display = 'none';
-                }).catch((message) => {
-                    alert(message);
-                });
-            };
-            document.body.appendChild(script);
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
         });
 
-    </script>
+        // The 'createUnityInstance' function is defined in the loader script.
+        // The error "createUnityInstance is not defined" happens because the inline script
+        // runs before the loader script has been fully downloaded and executed.
+        // To fix this, we'll create a script element dynamically and attach an 'onload' event handler.
+        // This ensures that we only call createUnityInstance after the loader script is ready.
+        const unityLoaderScript = document.createElement("script");
 
+        // Set the source to the Unity loader script
+        unityLoaderScript.src = "Build/Build.loader.js";
+
+        // Once the script is loaded, the 'onload' event will fire,
+        // and we can safely call createUnityInstance.
+        unityLoaderScript.onload = () => {
+          createUnityInstance(document.querySelector("#unity-canvas"), {
+              dataUrl: "Build/Build.data",
+              frameworkUrl: "Build/Build.framework.js",
+              codeUrl: "Build/Build.wasm",
+              streamingAssetsUrl: "StreamingAssets",
+              companyName: "Titanz Game",
+              productName: "Titanz Game Portfolio",
+              productVersion: "1.0",
+          });
+        };
+
+        // Append the script to the body to start loading it.
+        document.body.appendChild(unityLoaderScript);
+    </script>
 </body>
 </html>
+
